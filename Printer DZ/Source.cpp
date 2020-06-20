@@ -1,9 +1,8 @@
 #include <iostream>
 #include <string>
-#include <conio.h>
 using namespace std;
 
-template<typename T>
+template<class T>
 class Queue
 {
 private:
@@ -19,15 +18,11 @@ public:
         arr = new T[this->size];
         counter = 0;
     }
-    ~Queue()
-    {
-        delete[] arr;
-    }
-    void AddElement(T Element)
+    void AddElement(T element)
     {
         if (this->CheckQueue() != false)
         {
-            this->arr[this->counter] = Element;
+            this->arr[this->counter] = element;
             this->counter++;
         }
     }
@@ -53,29 +48,14 @@ public:
             this->CheckQueue();
         }
     }
-    void DeleteElementQueueRing()
-    {
-        if (this->counter != 0)
-        {
-            T temp = this->arr[0];
-            for (int i = 1; i < this->counter; i++)
-            {
-                this->arr[i - 1] = this->arr[i];
-            }
-            this->arr[this->counter - 1] = temp;
-        }
-        else
-        {
-            this->CheckQueue();
-        }
-    }
     void DeleteElementQueuePriority()
     {
         if (this->counter != 0)
         {
             T* tmp = new T[this->counter - 1];
             T temp = this->arr[0];
-            int count = 0, valueSameElements = 0;
+            int count = 0;
+            int value = 0;
             for (int i = 0; i < this->counter; i++)
             {
                 if (temp < arr[i])
@@ -86,7 +66,7 @@ public:
             for (int i = 0; i < this->counter; i++)
             {
                 if (arr[i] == temp)
-                    valueSameElements++;
+                    value++;
             }
             for (int i = 0; i < this->counter; i++)
             {
@@ -95,11 +75,11 @@ public:
                     tmp[count] = this->arr[i];
                     count++;
                 }
-                if (this->arr[i] == temp && valueSameElements > 1)
+                if (this->arr[i] == temp && value > 1)
                 {
                     tmp[count] = this->arr[i];
                     count++;
-                    valueSameElements--;
+                    value--;
                 }
             }
             for (int i = 0; i < this->counter - 1; i++)
@@ -123,38 +103,17 @@ public:
         else
         {   return 0;     }
     }
-    void ShowQueue()
+    void ShowQueue() const
     {
-        this->CheckQueue();
         for (int i = 0; i < this->counter; i++)
         {
             cout << this->arr[i] << "   ";
         }
         cout << endl;
     }
-    int SizeQueue()
+    ~Queue()
     {
-        cout << "Size queue -> " << this->size << endl;
-        cout << "Elements in queue -> " << this->counter << endl;
-        return this->size;
-    }
-    void DeleteQueue()
-    {
-        for (int i = 0; i < this->counter; i++)
-        {
-            arr[i] = nullptr;
-        }
-        this->counter = 0;
-    }
-    T GetFirst()
-    {
-        cout << "First element in queue -> ";
-        return this->arr[0];
-    }
-    T GetLast()
-    {
-        cout << "Last element in queue -> ";
-        return this->arr[this->counter - 1];
+        delete[] arr;
     }
 };
 class Time
@@ -174,7 +133,20 @@ public:
     }
     void ShowTime()
     {
-        cout << "Time -> " << hours << ":" << minutes << ":" << seconds << endl;
+        cout << "Time: ";
+        if (hours < 10)
+            cout << "0" << hours << ":";
+        else
+            cout << hours << ":";
+        if (minutes < 10)
+            cout << "0" << minutes << ":";
+        else
+            cout << minutes << ":";
+        if (seconds < 10)
+            cout << "0" << seconds;
+        else
+            cout << seconds;
+        cout << endl;
     }
     void SetHours(int h)
     {
@@ -220,7 +192,7 @@ private:
 public:
     Document() :name(""), sizee(0), time(0), priority(0)
     {   }
-    Document(string name, int sizee, int numberSheets, Time* time, int priority)
+    Document(string name, int sizee, Time* time, int priority)
     {
         this->name = name;
         this->sizee = sizee;
@@ -268,21 +240,25 @@ public:
     {
         return this->priority;
     }
+    ~Document()
+    {
+        delete[] time;
+    }
 };
 int main()
 {
     string symbol = "";
     cout << "~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     Time time(12, 52, 35);
-    Document u = { "Salary", 29, 35,  &time, 15 };
+    Document u = { "Salary", 29,  &time, 15 };
     u.Show();
     cout << "~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-    Time time1(10, 24, 27);
-    Document u1 = { "Bookkeeping", 28, 78,  &time1, 25 };
+    Time time1(9, 24, 27);
+    Document u1 = { "Bookkeeping", 28,  &time1, 25 };
     u1.Show();
     cout << "~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-    Time time2(12, 52, 35);
-    Document u2 = { "Office document", 35, 15,  &time2, 8 };
+    Time time2(8, 13, 21);
+    Document u2 = { "Office document", 35, &time2, 8 };
     u2.Show();
     cout << "~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     cout << "Send document to printer enter (y) or \"yes\":" << endl;
